@@ -9,6 +9,25 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  email    String  @unique
+  provider String
+  oauth_id String
+  image    String?
+  Task     Task[]
+}
+
+model Task {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  authorId    String @db.ObjectId
+  author      User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  priority    String
 }
