@@ -1,4 +1,4 @@
-AI-Powered Task Prioritization System 🚀
+#AI-Powered Task Prioritization System
 
 📌 Project Overview
 
