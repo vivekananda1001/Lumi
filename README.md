@@ -65,7 +65,6 @@ Text-to-Speech	AI-generated reminders for upcoming tasks
 Document Intelligence	Extract tasks from uploaded documents
 ChatGPT-4 for Prioritization	Smart task ranking & suggestions
 
-**AI Services Integration**
 <img width="763" alt="Screenshot 2025-03-26 at 2 49 28 PM" src="https://github.com/user-attachments/assets/4329153c-3ff1-4913-8a94-611f495fa9b3" />
 
 
