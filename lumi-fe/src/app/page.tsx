@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { Menu, Settings, Plus, Mic } from "lucide-react";
 import Card from "@/components/ui/card";
 import wavEncoder from "wav-encoder";
-
+import axios from 'axios'
 interface Task {
   title: string;
   priority: "hi" | "md" | "lo";
@@ -18,6 +18,7 @@ export default function Dashboard() {
   const audioContextRef = useRef<AudioContext | null>(null);
   const processorRef = useRef<ScriptProcessorNode | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
+  const [tasks, setTasks] = useState<Task[]>([]);
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState("English");
@@ -113,49 +114,75 @@ export default function Dashboard() {
 
     setRecording(false);
   };
-
   const sendAudioToBackend = async (audioBlob: Blob) => {
     const formData = new FormData();
     formData.append("audio", audioBlob, "audio.wav");
-
+    
     try {
       await fetch("/api/save-audio", {
         method: "POST",
         body: formData,
       });
+      // console.log(JSON.stringify({ audio: "Backend/audio.wav" }));
       console.log("Audio successfully sent to backend");
-    } catch (error) {
-      console.error("Error sending audio:", error);
-    }
-  };
 
-  const [tasks, setTasks] = useState<Task[]>([]);
-  useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const response = await fetch("/api/get-tasks");
-        const data = await response.json();
-  
-        if (data?.response?.tasks) {
-          setTasks(
-            data.response.tasks.map((task: any) => ({
+      const jsonPayload = JSON.stringify({ audio: "Backend/audio.wav" });
+
+        // Second fetch to transcribe audio using absolute URL with JSON body
+        const response = await axios.post("http://localhost:8001/transcribe", jsonPayload, {
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+          },
+        });
+      console.log("Response successfully recieved from backend");
+      // if (!response.ok) {
+      //     throw new Error('Transcription failed');
+      // }
+        
+      const transcriptionResult =  response.data;
+      const parsedResult = JSON.parse(transcriptionResult);
+      console.log("Transcription result:", transcriptionResult);
+      // console.log(parsedResult.response.tasks);
+
+      setTasks(
+          parsedResult.response.tasks.map((task: any) => ({
               title: task.title,
               priority: mapPriority(task.priority),
               startTime: task.startTime,
               endTime: task.endTime,
             }))
-          );
-        }
+      );
       } catch (error) {
-        console.error("Error fetching tasks:", error);
-      }
-    };
+      console.error("Error sending audio:", error);
+    }
+  };
+
+  // useEffect(() => {
+  //   const fetchTasks = async () => {
+  //     try {
+  //       // const response = await fetch("/api/get-tasks");
+  //       // const data = await response.json();
+  //       // if (data?.response?.tasks) {
+  //       //   setTasks(
+  //       //     data.response.tasks.map((task: any) => ({
+  //       //       title: task.title,
+  //       //       priority: mapPriority(task.priority),
+  //       //       startTime: task.startTime,
+  //       //       endTime: task.endTime,
+  //       //     }))
+  //       //   );
+  //       // }
+  //     } catch (error) {
+  //       console.error("Error fetching tasks:", error);
+  //     }
+  //   };
   
-    fetchTasks();
-    const interval = setInterval(fetchTasks, 3000); // Poll every 5 seconds
+    // fetchTasks();
+  //   const interval = setInterval(fetchTasks, 3000); // Poll every 5 seconds
   
-    return () => clearInterval(interval);
-  }, []);
+  //   return () => clearInterval(interval);
+  // }, []);
   
 
   const mapPriority = (priority: string): "hi" | "md" | "lo" => {

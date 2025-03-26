@@ -11,7 +11,6 @@ const fontSans = FontSans({
   subsets: ["latin"],
 })
 
-
 export const metadata: Metadata = {
   title: "Lumi.AI",
   description: "To best task prioritization!",

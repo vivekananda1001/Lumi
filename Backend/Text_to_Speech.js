@@ -1,5 +1,6 @@
 import * as sdk from "microsoft-cognitiveservices-speech-sdk";
 import readline from "readline";
+import player from "node-wav-player";
 
 // This example requires environment variables named "SPEECH_KEY" and "SPEECH_REGION"
 const speechConfig = sdk.SpeechConfig.fromSubscription(process.env.SPEECH_KEY, process.env.SPEECH_REGION);
@@ -32,6 +33,9 @@ function synthesizeText(text, audioFile) {
       synthesizer.close();
       synthesizer = null;
     });
+    player.play({ path: audioFile })
+          .then(() => console.log("Audio played successfully"))
+          .catch((err) => console.error("Error playing audio:", err));
   console.log("Now synthesizing to: " + audioFile);
 }
 
