@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
 
     const buffer = Buffer.from(await audioFile.arrayBuffer());
 
-    const savePath = path.join(process.cwd(), "../lumi-BE/recorded_audio.wav");
+    const savePath = path.join(process.cwd(), "../Backend/audio.wav");
 
     await writeFile(savePath, buffer);
     console.log("Audio saved successfully at:", savePath);

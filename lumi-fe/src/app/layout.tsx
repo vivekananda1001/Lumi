@@ -13,8 +13,8 @@ const fontSans = FontSans({
 
 
 export const metadata: Metadata = {
-  title: "Quick Chat App",
-  description: "To chatting as Quick as Possible",
+  title: "Lumi.AI",
+  description: "To best task prioritization!",
 };
 
 export default function RootLayout({

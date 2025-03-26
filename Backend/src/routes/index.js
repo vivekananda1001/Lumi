@@ -13,6 +13,6 @@ router.get('/tasks', authMiddleware, taskController.getTasks);
 router.delete('/tasks/:id', authMiddleware, taskController.deleteTask);
 router.get('/tasks/:id', authMiddleware, taskController.getTaskById);
 
-router.post('/gpt', authMiddleware, taskController.chatWithGpt); // Add this line
+router.post('/gpt', taskController.chatWithGpt); // Add this line
 
 export default router;

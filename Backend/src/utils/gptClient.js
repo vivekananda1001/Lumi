@@ -11,8 +11,8 @@ async function callGptModel(messages) {
 
   const data = {
     messages,
-    model: "gpt-4",
-    max_tokens: 500,
+    model: "gpt-35-turbo",
+    max_tokens: 1000,
     response_format: { type: "json_object" }, // Ensure JSON output
   };
 

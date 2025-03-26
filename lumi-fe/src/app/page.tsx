@@ -116,7 +116,7 @@ export default function Dashboard() {
 
   const sendAudioToBackend = async (audioBlob: Blob) => {
     const formData = new FormData();
-    formData.append("audio", audioBlob, "recorded_audio.wav");
+    formData.append("audio", audioBlob, "audio.wav");
 
     try {
       await fetch("/api/save-audio", {
